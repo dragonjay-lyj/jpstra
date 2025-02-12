@@ -10,8 +10,25 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.0.8",
+    "@astrojs/react": "^4.2.0",
     "@astrojs/starlight": "^0.31.1",
+    "@astrojs/tailwind": "^6.0.0",
+    "@astrojs/vercel": "^8.0.6",
+    "@heroui/react": "^2.6.14",
+    "@heroui/use-theme": "^2.1.2",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
     "astro": "^5.1.5",
-    "sharp": "^0.32.5"
+    "astro-icon": "^1.1.5",
+    "framer-motion": "^12.4.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sharp": "^0.32.5",
+    "starlight-contributor-list": "^0.2.0",
+    "starlight-heading-badges": "^0.4.0",
+    "starlight-image-zoom": "^0.10.1",
+    "starlight-showcases": "^0.3.0",
+    "tailwindcss": "^3.4.17"
   }
 }

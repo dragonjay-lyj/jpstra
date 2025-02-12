@@ -1,36 +1,37 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: 「穿在身上的历史」——足袋与褌的工艺美学
+description: 专注日本足袋（分趾袜）与褌（传统腰布）的文化溯源、制作技艺与现代重生。从祭典仪礼到日常生活，重新发现东瀛衣饰中的巧思与哲学。
 template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: 以布为脉，跨越千年的足下律动与腰间温度
   image:
     file: ../../assets/houston.webp
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: 浏览足袋
+      link: /tabi/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+    - text: 浏览褌
+      link: /fundoshi/
       icon: external
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { CardGrid } from '@astrojs/starlight/components';
+import Card from '../../components/Card'
+import { ContributorList } from "starlight-contributor-list";
 
-## Next steps
+## 来看看
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+	<Card title="足袋" client:visible>
+		从田间草履到现代设计，解析分趾足袋的进化轨迹。为何一片布，能让百年匠人倾注一生？
 	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+	<Card title="褌" client:visible>
+		一块布如何撑起江户工人的汗水、相扑力士的信仰？揭秘褌的百种系法与文化隐喻。
 	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+	<Card title="画廊" client:visible>
+		匠人褶皱的手、染坊渐变的蓝、祭典跃动的白…用影像收藏未被书写的细节。
 	</Card>
 </CardGrid>
+
+<ContributorList githubRepo="dragonjay-lyj/jpstra" />
