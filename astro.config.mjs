@@ -40,7 +40,7 @@ export default defineConfig({
           telegram: 'https://t.me/NeilBowM',
       },
       editLink: {
-          baseUrl: 'https://github.com/dragonjay-lyj/jpstra/edit/master/src/content/docs/',
+          baseUrl: 'https://github.com/dragonjay-lyj/jpstra/edit/master/',
         },
       sidebar: [
           {
