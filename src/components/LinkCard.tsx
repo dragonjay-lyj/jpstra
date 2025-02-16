@@ -75,6 +75,12 @@ const EnhancedLinkCard = ({
           `} />
 
           {/* 内容区域 */}
+          <Link
+      href={href}
+      isExternal={isExternalLink}
+      className="block w-full no-underline group/link"
+      color="foreground"
+    >
           <div className="flex-1 z-10">
             <div className="flex items-center gap-2 mb-1">
               {Icon && (
@@ -102,7 +108,7 @@ const EnhancedLinkCard = ({
               </p>
             )}
           </div>
-
+          </Link>
           {/* 图标区域 */}
           <div className={`
             flex-shrink-0 transform
