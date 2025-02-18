@@ -21,7 +21,7 @@ export default defineConfig({
   integrations: [starlight({
       title: {
           'zh-CN': '分趾为履・布缠为魂',
-          en: 'Tabi as Steps, Fundoshi as Soul',
+          en: 'Divided Toes, Bound Souls',
         },
         plugins: [starlightImageZoom(),starlightHeadingBadges()],
       disable404Route: true,
