@@ -1,38 +1,35 @@
-// LinkCard.tsx
-import React from 'react';
-import { Card, CardBody, CardFooter } from '@heroui/card';
+import { Card, CardBody } from '@heroui/card';
 import { Link } from '@heroui/link';
 
-interface LinkCardProps {
-  title: string;
-  href: string;
-}
-
-const LinkCard: React.FC<LinkCardProps> = ({ title, href }) => {
+const LinkCard = ({ title, href }) => {
   return (
-    <Card
-      shadow="md"
-      radius="lg"
-      isHoverable
-      isPressable
+    <Card 
+      shadow="lg" 
+      radius="lg" 
+      isHoverable 
+      isPressable 
       classNames={{
-        base: 'transition-transform duration-300 hover:scale-105',
+        base: "transition-shadow duration-300 ease-in-out hover:shadow-xl",
+        body: "p-4 flex items-center justify-between space-x-4"
       }}
     >
-      <CardBody className="p-6">
-        <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-      </CardBody>
-      <CardFooter className="p-4 bg-gray-100">
-        <Link
-          href={href}
-          color="primary"
-          underline="hover"
-          isExternal
-          className="text-blue-600 hover:text-blue-800"
+      <CardBody>
+        <div className="flex flex-col">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h2>
+        </div>
+        <Link 
+          size="md" 
+          color="primary" 
+          underline="hover" 
+          href={href} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          showAnchorIcon 
+          className="mt-2 text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-300"
         >
-          Visit
+          Visit Link
         </Link>
-      </CardFooter>
+      </CardBody>
     </Card>
   );
 };

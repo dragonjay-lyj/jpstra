@@ -1,65 +1,32 @@
-// ImageComponent.tsx
-import React from 'react';
 import { Image } from '@heroui/image';
 
-interface ImageComponentProps {
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
-  shadow?: 'none' | 'sm' | 'md' | 'lg';
-  loading?: 'eager' | 'lazy';
-  fallbackSrc?: string;
-  isBlurred?: boolean;
-  isZoomed?: boolean;
-  removeWrapper?: boolean;
-  disableSkeleton?: boolean;
-  classNames?: Partial<Record<'img' | 'wrapper' | 'zoomedWrapper' | 'blurredImg', string>>;
-  onLoad?: React.ReactEventHandler<HTMLImageElement>;
-  onError?: () => void;
-}
-
-const ImageComponent: React.FC<ImageComponentProps> = ({
-  src,
-  alt,
-  width,
-  height,
-  radius = 'xl',
-  shadow = 'none',
-  loading = 'lazy',
-  fallbackSrc,
-  isBlurred = false,
-  isZoomed = false,
-  removeWrapper = false,
-  disableSkeleton = false,
-  classNames,
-  onLoad,
-  onError,
-}) => {
+const CustomImage = ({ src, alt, width, height, fallbackSrc }) => {
   return (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      shadow={shadow}
-      loading={loading}
-      fallbackSrc={fallbackSrc}
-      isBlurred={isBlurred}
-      isZoomed={isZoomed}
-      removeWrapper={removeWrapper}
-      disableSkeleton={disableSkeleton}
-      classNames={{
-        img: `transition-transform duration-300 hover:scale-105 ${classNames?.img || ''}`,
-        wrapper: `shadow-${shadow} rounded-${radius} ${classNames?.wrapper || ''}`,
-        zoomedWrapper: classNames?.zoomedWrapper || '',
-        blurredImg: classNames?.blurredImg || '',
-      }}
-      onLoad={onLoad}
-      onError={onError}
-    />
+    <div className="relative w-full max-w-screen-lg mx-auto overflow-hidden rounded-lg shadow-md transition-shadow duration-300 ease-in-out hover:shadow-lg">
+      <Image 
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        fallbackSrc={fallbackSrc}
+        isBlurred={false}
+        isZoomed={true}
+        removeWrapper={false}
+        disableSkeleton={false}
+        classNames={{
+          img: "object-cover w-full h-full transition-transform duration-500 transform hover:scale-105",
+          wrapper: "block relative",
+          zoomedWrapper: "inset-0 z-10",
+          blurredImg: "inset-0 z-0 blur-sm opacity-75"
+        }}
+        onLoad={(event) => console.log('Image loaded')}
+        onError={() => console.error('Image failed to load')}
+      />
+    </div>
   );
 };
 
-export default ImageComponent;
+export default CustomImage;
+
+
+

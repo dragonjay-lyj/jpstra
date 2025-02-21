@@ -59,7 +59,12 @@ export default defineConfig({
               label: '画廊',
               translations: { 'en': 'Gallery' },
               autogenerate: { directory: 'gallery' }
-          }
+          },
+          {
+            label: '调查问卷',
+            translations: { 'en': 'Questionnaire' },
+            autogenerate: { directory: 'questionnaire' }
+        }
       ],
   }), icon(), react(), mdx(), tailwind(), sitemap()],
 

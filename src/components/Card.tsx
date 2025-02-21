@@ -1,34 +1,32 @@
-// CardComponent.tsx
 import React from 'react';
 import { Card, CardHeader, CardBody, CardFooter } from '@heroui/card';
 
-interface CardComponentProps {
-  title: string;
-  children: React.ReactNode;
-  footer?: React.ReactNode;
-}
-
-const CardComponent: React.FC<CardComponentProps> = ({ title, children, footer }) => {
+const CustomCard = ({ title, children }) => {
   return (
-    <Card
-      shadow="md"
-      radius="lg"
-      isHoverable
-      isPressable
+    <Card 
+      shadow="lg" 
+      radius="lg" 
+      isHoverable 
+      isPressable 
+      disableAnimation={false}
       classNames={{
-        base: 'transition-transform duration-300 hover:scale-105',
-        header: 'bg-gray-50 text-gray-900 px-6 py-4',
-        body: 'px-6 py-4',
-        footer: 'bg-gray-100 text-gray-600 px-6 py-4',
+        base: "transition-shadow duration-300 ease-in-out hover:shadow-xl bg-white dark:bg-gray-800",
+        header: "p-4 bg-blue-500 dark:bg-blue-900 text-white font-bold",
+        body: "p-4",
+        footer: "p-4 bg-gray-100 dark:bg-gray-700"
       }}
     >
       <CardHeader>
-        <h3 className="text-xl font-semibold">{title}</h3>
+        {title}
       </CardHeader>
-      <CardBody>{children}</CardBody>
-      {footer && <CardFooter>{footer}</CardFooter>}
+      <CardBody>
+        {children}
+      </CardBody>
+      <CardFooter>
+        {/* Footer content can be added here if needed */}
+      </CardFooter>
     </Card>
   );
 };
 
-export default CardComponent;
+export default CustomCard;
