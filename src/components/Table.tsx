@@ -1,173 +1,123 @@
+// /components/EnhancedTable.tsx
+
 import React, { useState, useEffect } from "react";
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
-  TableColumn, 
-  TableRow, 
-  TableCell 
-} from "@heroui/table";
-import { Image } from "@heroui/image";
+import clsx from "clsx";
 
-// 增强版表格组件，带有更多动效和功能
-const EnhancedTable = ({ 
-  data, 
+/**
+ * Defines the structure for a single column in the table.
+ * @template T The type of the data item for a row.
+ */
+export interface ColumnDef<T> {
+  /**
+   * The key from the data object to display in this column.
+   */
+  key: keyof T;
+  /**
+   * The header label for this column.
+   */
+  label: string;
+  /**
+   * An optional custom render function for the cell content.
+   * @param item The entire data object for the current row.
+   * @returns A React node to be rendered in the cell.
+   */
+  render?: (item: T) => React.ReactNode;
+}
+
+/**
+ * Props for the EnhancedTable component.
+ * @template T The type of the data item, must include an 'id'.
+ */
+interface EnhancedTableProps<T> {
+  /**
+   * An array of data objects to display in the table.
+   */
+  data: T[];
+  /**
+   * An array of column definitions that configure the table's structure.
+   */
+  columns: ColumnDef<T>[];
+  /**
+   * If true, applies alternating background colors to rows for better readability.
+   * @default false
+   */
+  isStriped?: boolean;
+  /**
+   * Optional additional CSS classes to apply to the `<table>` element.
+   */
+  className?: string;
+}
+
+/**
+ * A modern, responsive, and animated table component.
+ * It displays as a standard table on desktop and transforms into a list of cards on mobile.
+ * Features staggered entrance animations and clean hover states.
+ */
+export const EnhancedTable = <T extends { id: string | number }>({
+  data,
   columns,
-  shadow = "sm",
-  isStriped = true,
-  isCompact = false,
-  fullWidth = true,
-  darkMode = false,
-  animationLevel = "medium" // none, subtle, medium, high
-}) => {
-  const [hoveredRow, setHoveredRow] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState(darkMode ? 'dark' : 'light');
+  isStriped = false,
+  className,
+}: EnhancedTableProps<T>) => {
+  const [isMounted, setIsMounted] = useState(false);
 
-  // 监听暗黑模式变化
   useEffect(() => {
-    setCurrentTheme(darkMode ? 'dark' : 'light');
-  }, [darkMode]);
-
-  // 表格可见性动画
-  useEffect(() => {
-    setIsVisible(true);
+    // Mount with a slight delay to ensure CSS transitions are applied.
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
-  // 获取适当的动画类
-  const getAnimationClasses = () => {
-    switch (animationLevel) {
-      case "none":
-        return "";
-      case "subtle":
-        return "transition-all duration-200";
-      case "high":
-        return "transition-all duration-500 transform";
-      case "medium":
-      default:
-        return "transition-all duration-300";
-    }
-  };
-
-  // 行悬停动画
-  const getRowHoverClasses = () => {
-    if (animationLevel === "none") return "";
-    
-    let baseClasses = "transition-all";
-    
-    switch (animationLevel) {
-      case "subtle":
-        return `${baseClasses} duration-200 hover:bg-opacity-10 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:bg-opacity-30`;
-      case "high":
-        return `${baseClasses} duration-300 hover:bg-opacity-15 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:bg-opacity-50 hover:shadow-md transform hover:-translate-y-1`;
-      case "medium":
-      default:
-        return `${baseClasses} duration-200 hover:bg-opacity-10 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:bg-opacity-40`;
-    }
-  };
-
-  // 处理单元格内容渲染
-  const renderCellContent = (content, column, rowIndex) => {
-    // 检查是否为图片
-    if (column.type === "image" && content) {
-      const imageAnimClass = animationLevel === "none" ? "" :
-                            animationLevel === "subtle" ? "transition-transform duration-300 hover:scale-[1.02]" :
-                            animationLevel === "high" ? "transition-all duration-500 hover:scale-110 hover:shadow-xl" :
-                            "transition-transform duration-300 hover:scale-105";
-                            
-      return (
-        <div className="relative overflow-hidden rounded-lg group">
-          <Image
-            src={content}
-            alt={`Image in ${column.key}`}
-            width={280}
-            height={216}
-            className={`w-full h-auto ${imageAnimClass}`}
-            isZoomed={animationLevel !== "none"}
-          />
-          {animationLevel !== "none" && animationLevel !== "subtle" && (
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 pointer-events-none" />
-          )}
-        </div>
-      );
-    }
-    
-    // 文本内容支持换行
-    if (typeof content === 'string' && content.includes('<br>')) {
-      const textAnimClass = animationLevel === "none" ? "" :
-                         animationLevel === "subtle" ? "transition-colors duration-200" :
-                         animationLevel === "high" ? "transition-all duration-300" :
-                         "transition-colors duration-200";
-                         
-      return (
-        <div className={`${textAnimClass} ${hoveredRow === rowIndex ? 'text-black dark:text-white' : ''}`}>
-          {content.split('<br>').map((text, i) => (
-            <React.Fragment key={i}>
-              {text}
-              {i < content.split('<br>').length - 1 && <br />}
-            </React.Fragment>
-          ))}
-        </div>
-      );
-    }
-    
-    return content;
-  };
-
-  const tableClasses = {
-    base: `custom-table-wrapper ${getAnimationClasses()} ${isVisible ? 'opacity-100' : 'opacity-0'}`,
-    table: "min-w-full",
-    thead: `${animationLevel !== "none" ? "sticky top-0 z-10 backdrop-blur-sm bg-white bg-opacity-90 dark:bg-gray-900 dark:bg-opacity-90" : ""}`,
-    tbody: "",
-    tr: `group ${getRowHoverClasses()}`,
-    th: `text-left py-3 px-4 font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`,
-    td: "py-3 px-4 align-top",
-  };
-
   return (
-    <div className={`w-full overflow-x-auto rounded-lg ${shadow === 'sm' ? 'shadow-sm' : shadow === 'md' ? 'shadow-md' : shadow === 'lg' ? 'shadow-lg' : ''} ${currentTheme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
-      <Table
-        shadow="none" // 我们自己处理阴影
-        isStriped={isStriped}
-        isCompact={isCompact}
-        fullWidth={fullWidth}
-        classNames={tableClasses}
-        aria-label="Enhanced custom table with animations"
-      >
-        <TableHeader>
-          {columns.map((column) => (
-            <TableColumn 
-              key={column.key} 
-              align={column.align || "start"}
-              className={`text-sm md:text-base ${animationLevel !== "none" ? "transition-colors duration-300" : ""}`}
-            >
-              {column.label}
-            </TableColumn>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {data.map((row, rowIndex) => (
-            <TableRow 
-              key={rowIndex}
-              onMouseEnter={() => setHoveredRow(rowIndex)}
-              onMouseLeave={() => setHoveredRow(null)}
-              className={`border-b ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'} last:border-0`}
+    <div className="w-full overflow-x-auto rounded-lg">
+      <table className={clsx("w-full min-w-[640px] border-collapse text-left", className)}>
+        <thead className="hidden md:table-header-group">
+          <tr className="border-b border-neutral-200 dark:border-neutral-800">
+            {columns.map((column) => (
+              <th
+                key={String(column.key)}
+                className="sticky top-0 z-10 bg-white/80 p-4 text-sm font-semibold text-neutral-800 backdrop-blur-sm dark:bg-neutral-900/80 dark:text-neutral-200"
+              >
+                {column.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="block md:table-row-group">
+          {data.map((item, rowIndex) => (
+            <tr
+              key={item.id}
+              className={clsx(
+                "group transform-gpu transition-all duration-300 ease-in-out",
+                // Responsive layout: card on mobile, row on desktop
+                "block rounded-lg border p-4 shadow-sm dark:border-neutral-800 md:table-row md:border-b md:p-0 md:shadow-none",
+                // Add margin between cards on mobile
+                "mb-4 md:mb-0",
+                // Striped rows styling
+                isStriped && (rowIndex % 2 === 0 ? "bg-white dark:bg-neutral-900" : "bg-neutral-50 dark:bg-neutral-800/50"),
+                // Hover state
+                "hover:!bg-blue-50 hover:shadow-md dark:hover:!bg-blue-500/10",
+                // Entrance animation
+                isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              )}
+              style={{ transitionDelay: `${rowIndex * 50}ms` }}
             >
               {columns.map((column) => (
-                <TableCell 
-                  key={`${rowIndex}-${column.key}`}
-                  className={`${column.type === "image" ? "w-[280px] md:w-[280px] sm:w-full" : ""} text-sm md:text-base`}
+                <td
+                  key={`${item.id}-${String(column.key)}`}
+                  className="block p-2 text-right text-sm text-neutral-700 dark:text-neutral-300 md:table-cell md:p-4 md:text-left"
                 >
-                  {renderCellContent(row[column.key], column, rowIndex)}
-                </TableCell>
+                  {/* Mobile-only label */}
+                  <span className="mr-2 font-medium text-neutral-500 md:hidden">{column.label}:</span>
+                  {/* Cell content */}
+                  {column.render ? column.render(item) : (item[column.key] as React.ReactNode)}
+                </td>
               ))}
-            </TableRow>
+            </tr>
           ))}
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
     </div>
   );
 };
 
 export default EnhancedTable;
-

@@ -4,7 +4,6 @@ import starlight from '@astrojs/starlight';
 import starlightImageZoom from 'starlight-image-zoom'
 import starlightHeadingBadges from 'starlight-heading-badges'
 import icon from "astro-icon";
-import tailwind from '@astrojs/tailwind';
 
 import react from '@astrojs/react';
 
@@ -14,15 +13,20 @@ import vercel from '@astrojs/vercel';
 
 import sitemap from '@astrojs/sitemap';
 
+import tailwindcss from '@tailwindcss/vite';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://jptra.dragonjay.top',
 
   integrations: [starlight({
       title: {
-          'zh-CN': '分趾为履・布缠为魂',
-          en: 'Divided Toes, Bound Souls',
+          'zh-CN': '足袋与褌',
         },
+        customCss: [
+        // Path to your Tailwind base styles:
+        './src/styles/global.css',
+      ],
         plugins: [starlightImageZoom(),starlightHeadingBadges()],
       disable404Route: true,
       defaultLocale: 'root',
@@ -30,45 +34,40 @@ export default defineConfig({
         root: {
           label: '简体中文',
           lang: 'zh-CN', 
+        }
         },
-          'en': {
-            label: 'English',
-            lang: 'en',
-          },
-        },
-      social: {
-          github: 'https://github.com/dragonjay-lyj/jpstra',
-          email: 'mailto:lyjcody@foxmail.com',
-          telegram: 'https://t.me/NeilBowM',
-      },
+      social: [
+          { icon: 'github', label: 'GitHub', href: 'https://github.com/dragonjay-lyj/jpstra' },
+          { icon: 'email', label: 'Email', href: 'mailto:lyjcody@foxmail.com' },
+          { icon: 'telegram', label: 'Telegram', href: 'https://t.me/NeilBowM' },
+      ],
       editLink: {
           baseUrl: 'https://github.com/dragonjay-lyj/jpstra/edit/master/',
         },
       sidebar: [
           {
               label: '足袋',
-              translations: { 'en': 'Tabi' },
               autogenerate: { directory: 'tabi' },
           },
           {
               label: '褌',
-              translations: { 'en': 'Fundoshi' },
               autogenerate: { directory: 'fundoshi' },
           },
           {
               label: '画廊',
-              translations: { 'en': 'Gallery' },
               autogenerate: { directory: 'gallery' }
           },
           {
             label: '调查问卷',
-            translations: { 'en': 'Questionnaire' },
             autogenerate: { directory: 'questionnaire' }
         }
       ],
-  }), icon(), react(), mdx(), tailwind(), sitemap()],
+  }), icon(), react(), mdx(), sitemap()],
 
   output: 'server',
-
   adapter: vercel(),
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
